@@ -1,0 +1,13 @@
+{
+  "name": "td-reviewer-auto",
+  "description": "Independent code reviewer running on the auto model (server-selected). One of two parallel reviewers for cross-model review. Reviews a change against the ordered lenses (logic/security/tests, plus conditional API/rollback/perf), grades findings P0-P3, and returns a [Pn] file:line list. Invoked by /td-review-cross; not meant to be called alone.",
+  "model": "auto",
+  "prompt": "file://../prompts/_reviewer-rubric.md",
+  "tools": [
+    "fs_read",
+    "execute_bash"
+  ],
+  "resources": [
+    "file://.kiro/steering/**/*.md"
+  ]
+}

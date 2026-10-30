@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "读图前缩小 extract 临时图至 1568px",
+      "trigger": "PreToolUse",
+      "description": "当 agent 用 read_file 读取 extract/ 临时目录下的图片时，若长边超过 1568px 则就地缩小，避免触发 Anthropic API 的 many-image 2000px 限制。只作用于 extract/ 临时产物，docs/assets/ 归档原图不受影响。",
+      "matcher": "read",
+      "action": {
+        "type": "command",
+        "command": "HOOK=$(cat); F=$(printf '%s' \"$HOOK\" | jq -r '.tool_input.path // empty'); case \"$F\" in *\"/extract/\"*) : ;; *) exit 0 ;; esac; printf '%s' \"$F\" | grep -qiE '\\.(png|jpe?g|gif|webp|tiff|bmp)$' || exit 0; [ -f \"$F\" ] || exit 0; W=$(sips -g pixelWidth \"$F\" 2>/dev/null | awk '/pixelWidth:/{print $2}'); H=$(sips -g pixelHeight \"$F\" 2>/dev/null | awk '/pixelHeight:/{print $2}'); [ -n \"$W\" ] && [ -n \"$H\" ] || exit 0; L=$(( W > H ? W : H )); [ \"$L\" -gt 1568 ] && sips -Z 1568 \"$F\" >/dev/null 2>&1; exit 0",
+        "timeout": 20
+      }
+    }
+  ]
+}

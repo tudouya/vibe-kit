@@ -1,0 +1,12 @@
+{
+  "name": "td-reviewer-arbiter",
+  "description": "Arbiter for cross-model review, running on claude-opus-5.5. Takes two independent reviewers' finding lists and reconciles them into one merged, de-duplicated table marking consensus vs single-source, higher severity on conflict, and human-attention routing. Invoked by /td-review-cross after both reviewers return; does not review code itself.",
+  "model": "claude-opus-5.5",
+  "prompt": "file://../prompts/_reviewer-arbiter.md",
+  "tools": [
+    "fs_read"
+  ],
+  "resources": [
+    "file://.kiro/steering/**/*.md"
+  ]
+}
